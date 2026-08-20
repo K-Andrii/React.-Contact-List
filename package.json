@@ -12,6 +12,7 @@
     "start": "concurrently \"npm run dev\" \"npm run api\""
   },
   "dependencies": {
+    "nanoid": "^6.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

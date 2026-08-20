@@ -1,13 +1,25 @@
 import styles from "./ContactItem.module.css";
 
-function ContactItem() {
+function ContactItem({ contact, onEdit, onDelete }) {
   return (
-    <div className={styles.contactContainer}>
+    <div
+      className={styles.contactContainer}
+      onDoubleClick={() => onEdit(contact)}
+    >
       <div className={styles.contactInfo}>
-        <span>FirstName</span>
-        <span>LastName</span>
+        <span>
+          {contact.firstName} {contact.lastName}
+        </span>
       </div>
-      <button className={styles.deleteContactBtn}>✕</button>
+      <button
+        className={styles.deleteContactBtn}
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(contact.id);
+        }}
+      >
+        ✕
+      </button>
     </div>
   );
 }
