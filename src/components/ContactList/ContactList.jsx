@@ -1,5 +1,6 @@
-import styles from "./ContactList.module.css";
-import ContactItem from "../ContactItem/ContactItem.jsx";
+import ContactItem from '../ContactItem/ContactItem.jsx';
+
+import styles from './ContactList.module.css';
 
 function ContactList({ contacts, onEdit, onDelete, onNew }) {
   return (

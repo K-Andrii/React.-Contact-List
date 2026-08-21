@@ -1,6 +1,6 @@
-import styles from "./Header.module.css";
+import styles from './Header.module.css';
 
-function Header(props) {
+function Header() {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Contact List</h2>
