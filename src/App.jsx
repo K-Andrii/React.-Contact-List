@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
-import ContactForm from "./components/ContactForm/ContactForm.jsx";
-import ContactList from "./components/ContactList/ContactList.jsx";
-import Header from "./components/Header/Header.jsx";
+import ContactForm from './components/ContactForm/ContactForm.jsx';
+import ContactList from './components/ContactList/ContactList.jsx';
+import Header from './components/Header/Header.jsx';
 
-import styles from "./App.module.css";
+import styles from './App.module.css';
 
 function App() {
   const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem("contacts");
+    const savedContacts = localStorage.getItem('contacts');
     return savedContacts ? JSON.parse(savedContacts) : [];
   });
   const [currentContact, setCurrentContact] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
+    localStorage.setItem('contacts', JSON.stringify(contacts));
   }, [contacts]);
 
   const handleSave = (data) => {

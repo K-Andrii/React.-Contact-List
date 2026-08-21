@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import styles from "./ContactForm.module.css";
+import styles from './ContactForm.module.css';
 
 const INITIAL_FORM_STATE = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
 };
 
 function ContactForm({ onSave, onDelete, currentContact }) {
@@ -22,7 +22,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
   };
 
   const handleClearField = (fieldName) => {
-    setFormData({ ...formData, [fieldName]: "" });
+    setFormData({ ...formData, [fieldName]: '' });
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("firstName")}
+            onClick={() => handleClearField('firstName')}
           >
             ✕
           </button>
@@ -62,7 +62,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("lastName")}
+            onClick={() => handleClearField('lastName')}
           >
             ✕
           </button>
@@ -78,7 +78,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("email")}
+            onClick={() => handleClearField('email')}
           >
             ✕
           </button>
@@ -94,7 +94,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("phone")}
+            onClick={() => handleClearField('phone')}
           >
             ✕
           </button>
