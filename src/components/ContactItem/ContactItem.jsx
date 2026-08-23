@@ -13,10 +13,7 @@ function ContactItem({ contact, onEdit, onDelete }) {
       </div>
       <button
         className={styles.deleteContactBtn}
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete(contact.id);
-        }}
+        onClick={() => onDelete(contact.id)}
       >
         ✕
       </button>

@@ -1,58 +1,60 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid';
 
-import ContactForm from "./components/ContactForm/ContactForm.jsx";
-import ContactList from "./components/ContactList/ContactList.jsx";
-import Header from "./components/Header/Header.jsx";
+import ContactForm from './components/ContactForm/ContactForm.jsx';
+import ContactList from './components/ContactList/ContactList.jsx';
+import Header from './components/Header/Header.jsx';
+import { INITIAL_FORM_STATE, STORAGE_KEY } from './utils/constants.js';
 
-import styles from "./App.module.css";
-
-const STORAGE_KEY = "contacts";
+import styles from './App.module.css';
 
 function App() {
-  const [contacts, setContacts] = useState(() => {
-    try {
-      const savedContacts = localStorage.getItem("contacts");
-      return savedContacts ? JSON.parse(savedContacts) : [];
-    } catch (error) {
-      //eslint-disable-next-line
-      console.error(error);
-      return [];
-    }
-  });
-  const [currentContact, setCurrentContact] = useState(null);
-  const [resetKey, setResetKey] = useState(nanoid());
+  const [contacts, setContacts] = useState([]);
+  const [currentContact, setCurrentContact] = useState(INITIAL_FORM_STATE);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+    try {
+      const savedContacts = localStorage.getItem(STORAGE_KEY);
+      if (savedContacts) {
+        setContacts(JSON.parse(savedContacts));
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }, []);
 
   const handleSave = (data) => {
-    if (currentContact) {
-      const updatedContact = { id: currentContact.id, ...data };
-      setContacts((prev) =>
-        prev.map((contact) =>
-          contact.id === currentContact.id ? updatedContact : contact,
-        ),
-      );
-      setCurrentContact(updatedContact);
-    } else {
-      const newContact = { id: nanoid(), ...data };
-      setContacts((prev) => [...prev, newContact]);
-      setResetKey(nanoid());
-    }
+    if (currentContact.id) updateContact(data);
+    else createNewContact(data);
+  };
+  const updateContact = (data) => {
+    const updatedContact = { ...data, id: currentContact.id };
+    const newContacts = contacts.map((contact) =>
+      contact.id === currentContact.id ? updatedContact : contact,
+    );
+    setContacts(newContacts);
+    setCurrentContact(updatedContact);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
+  };
+  const createNewContact = (data) => {
+    const newContact = { ...data, id: nanoid() };
+    const newContacts = [...contacts, newContact];
+    setContacts(newContacts);
+    setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ нова копія, а не той самий об'єкт
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
   };
   const handleEdit = (contact) => setCurrentContact(contact);
   const handleDelete = (id) => {
-    setContacts((prev) => prev.filter((contact) => contact.id !== id));
-    if (currentContact && currentContact.id === id) {
-      setCurrentContact(null);
-    }
+    const newContacts = contacts.filter((contact) => contact.id !== id);
+    setContacts(newContacts);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
+    if (currentContact.id === id) setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ теж
   };
+
   const handleNew = () => {
-    setCurrentContact(null);
-    setResetKey(nanoid());
+    setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ теж
   };
 
   return (
@@ -66,7 +68,6 @@ function App() {
           onNew={handleNew}
         />
         <ContactForm
-          key={currentContact ? currentContact.id : resetKey}
           onSave={handleSave}
           onDelete={handleDelete}
           currentContact={currentContact}

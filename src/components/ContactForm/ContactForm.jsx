@@ -1,28 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
 
-import styles from "./ContactForm.module.css";
-
-const INITIAL_FORM_STATE = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-};
+import styles from './ContactForm.module.css';
 
 function ContactForm({ onSave, onDelete, currentContact }) {
-  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+  const [formData, setFormData] = useState(currentContact);
+
+  useEffect(() => {
+    setFormData(currentContact);
+  }, [currentContact]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSaveClick = () => {
     onSave(formData);
-    if (!currentContact) setFormData(INITIAL_FORM_STATE);
   };
 
   const handleClearField = (fieldName) => {
-    setFormData({ ...formData, [fieldName]: "" });
+    setFormData((prev) => ({ ...prev, [fieldName]: '' }));
   };
 
   return (
@@ -38,7 +34,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("firstName")}
+            onClick={() => handleClearField('firstName')}
           >
             ✕
           </button>
@@ -54,7 +50,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("lastName")}
+            onClick={() => handleClearField('lastName')}
           >
             ✕
           </button>
@@ -70,7 +66,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("email")}
+            onClick={() => handleClearField('email')}
           >
             ✕
           </button>
@@ -86,7 +82,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
           />
           <button
             className={styles.clearBtn}
-            onClick={() => handleClearField("phone")}
+            onClick={() => handleClearField('phone')}
           >
             ✕
           </button>
@@ -94,11 +90,15 @@ function ContactForm({ onSave, onDelete, currentContact }) {
       </div>
 
       <div className={styles.buttonsWrapper}>
-        <button className="actionBtn" onClick={handleSaveClick}>
+        <button type="button" className="actionBtn" onClick={handleSaveClick}>
           Save
         </button>
-        {currentContact && (
-          <button className="actionBtn" onClick={onDelete}>
+        {currentContact.id && (
+          <button
+            type="button"
+            className="actionBtn"
+            onClick={() => onDelete(currentContact.id)}
+          >
             Delete
           </button>
         )}
