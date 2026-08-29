@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { nanoid } from 'nanoid';
-
+import {
+  addContact,
+  deleteContact,
+  editContact,
+  fetchContacts,
+} from './api/contactService.js';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import ContactList from './components/ContactList/ContactList.jsx';
 import Header from './components/Header/Header.jsx';
@@ -14,15 +18,16 @@ function App() {
   const [currentContact, setCurrentContact] = useState(INITIAL_FORM_STATE);
 
   useEffect(() => {
-    try {
-      const savedContacts = localStorage.getItem(STORAGE_KEY);
-      if (savedContacts) {
-        setContacts(JSON.parse(savedContacts));
+    const loadContacts = async () => {
+      const data = await fetchContacts();
+      if (data) {
+        setContacts(data);
       }
-    } catch (error) {
+    };
+    loadContacts().catch((error) => {
       // eslint-disable-next-line no-console
       console.error(error);
-    }
+    });
   }, []);
 
   const handleSave = (data) => {
@@ -39,7 +44,7 @@ function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
   };
   const createNewContact = (data) => {
-    const newContact = { ...data, id: nanoid() };
+    // const newContact = { ...data, id: nanoid() };
     const newContacts = [...contacts, newContact];
     setContacts(newContacts);
     setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ нова копія, а не той самий об'єкт
