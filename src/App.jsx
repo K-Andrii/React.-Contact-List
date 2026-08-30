@@ -9,7 +9,7 @@ import {
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import ContactList from './components/ContactList/ContactList.jsx';
 import Header from './components/Header/Header.jsx';
-import { INITIAL_FORM_STATE, STORAGE_KEY } from './utils/constants.js';
+import { INITIAL_FORM_STATE } from './utils/constants.js';
 
 import styles from './App.module.css';
 
@@ -34,32 +34,44 @@ function App() {
     if (currentContact.id) updateContact(data);
     else createNewContact(data);
   };
-  const updateContact = (data) => {
-    const updatedContact = { ...data, id: currentContact.id };
-    const newContacts = contacts.map((contact) =>
-      contact.id === currentContact.id ? updatedContact : contact,
-    );
-    setContacts(newContacts);
-    setCurrentContact(updatedContact);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
+  const updateContact = async (data) => {
+    try {
+      const updatedContact = await editContact(currentContact.id, data);
+      setContacts((prev) =>
+        prev.map((contact) =>
+          contact.id === currentContact.id ? updatedContact : contact,
+        ),
+      );
+      setCurrentContact(updatedContact);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
   };
-  const createNewContact = (data) => {
-    // const newContact = { ...data, id: nanoid() };
-    const newContacts = [...contacts, newContact];
-    setContacts(newContacts);
-    setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ нова копія, а не той самий об'єкт
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
+  const createNewContact = async (data) => {
+    try {
+      const newData = await addContact(data);
+      setContacts((prev) => [...prev, newData]);
+      setCurrentContact({ ...INITIAL_FORM_STATE });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  };
+  const handleDelete = async (id) => {
+    try {
+      await deleteContact(id);
+      setContacts((prev) => prev.filter((contact) => contact.id !== id));
+      if (currentContact.id === id)
+        setCurrentContact({ ...INITIAL_FORM_STATE });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
   };
   const handleEdit = (contact) => setCurrentContact(contact);
-  const handleDelete = (id) => {
-    const newContacts = contacts.filter((contact) => contact.id !== id);
-    setContacts(newContacts);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newContacts));
-    if (currentContact.id === id) setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ теж
-  };
-
   const handleNew = () => {
-    setCurrentContact({ ...INITIAL_FORM_STATE }); // ⬅ теж
+    setCurrentContact({ ...INITIAL_FORM_STATE });
   };
 
   return (

@@ -1,3 +1,19 @@
 {
-  "contacts": []
+  "contacts": [
+    {
+      "firstName": "Андрій",
+      "lastName": "Каленю",
+      "email": "and.kaleniuk@gmail.",
+      "phone": "0960133220",
+      "id": "xxqNqpp9pVY"
+    },
+    {
+      "firstName": "ANDRII",
+      "lastName": "KALENIUK",
+      "email": "",
+      "phone": "0960133220",
+      "id": "80z1lkULfBc"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
