@@ -26,7 +26,7 @@ function App() {
     };
     loadContacts().catch((error) => {
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.error(error.message);
     });
   }, []);
 
@@ -45,7 +45,7 @@ function App() {
       setCurrentContact(updatedContact);
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.error(error.message);
     }
   };
   const createNewContact = async (data) => {
@@ -55,7 +55,7 @@ function App() {
       setCurrentContact({ ...INITIAL_FORM_STATE });
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.error(error.message);
     }
   };
   const handleDelete = async (id) => {
@@ -66,7 +66,7 @@ function App() {
         setCurrentContact({ ...INITIAL_FORM_STATE });
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error);
+      console.error(error.message);
     }
   };
   const handleEdit = (contact) => setCurrentContact(contact);
