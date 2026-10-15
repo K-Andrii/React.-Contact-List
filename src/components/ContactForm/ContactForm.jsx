@@ -14,6 +14,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
   };
 
   const handleSaveClick = () => {
+    if (!formData.firstName.trim()) return;
     onSave(formData);
   };
 
@@ -33,6 +34,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
             placeholder="FirstName"
           />
           <button
+            type="button"
             className={styles.clearBtn}
             onClick={() => handleClearField('firstName')}
           >
@@ -49,6 +51,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
             placeholder="LastName"
           />
           <button
+            type="button"
             className={styles.clearBtn}
             onClick={() => handleClearField('lastName')}
           >
@@ -65,6 +68,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
             placeholder="Email"
           />
           <button
+            type="button"
             className={styles.clearBtn}
             onClick={() => handleClearField('email')}
           >
@@ -81,6 +85,7 @@ function ContactForm({ onSave, onDelete, currentContact }) {
             placeholder="Phone"
           />
           <button
+            type="button"
             className={styles.clearBtn}
             onClick={() => handleClearField('phone')}
           >

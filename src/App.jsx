@@ -1,28 +1,36 @@
 import { useEffect, useState } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
-  addContact,
-  deleteContact,
-  editContact,
+  addContact as addContactApi,
+  deleteContact as deleteContactApi,
+  editContact as editContactApi,
   fetchContacts,
 } from './api/contactService.js';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import ContactList from './components/ContactList/ContactList.jsx';
 import Header from './components/Header/Header.jsx';
+import {
+  addContact as addContactAction,
+  deleteContact as deleteContactAction,
+  setContacts as setContactsAction,
+  updateContact as updateContactAction,
+} from './store/contactsSlice.js';
 import { INITIAL_FORM_STATE } from './utils/constants.js';
 
 import styles from './App.module.css';
 
 function App() {
-  const [contacts, setContacts] = useState([]);
+  const contacts = useSelector((state) => state.contacts.items);
+  const dispatch = useDispatch();
   const [currentContact, setCurrentContact] = useState(INITIAL_FORM_STATE);
 
   useEffect(() => {
     const loadContacts = async () => {
       const data = await fetchContacts();
-      if (data) {
-        setContacts(data);
-      }
+      dispatch(setContactsAction(data));
+      dispatch(setContactsAction(data));
     };
     loadContacts().catch((error) => {
       // eslint-disable-next-line no-console
@@ -36,12 +44,8 @@ function App() {
   };
   const updateContact = async (data) => {
     try {
-      const updatedContact = await editContact(currentContact.id, data);
-      setContacts((prev) =>
-        prev.map((contact) =>
-          contact.id === currentContact.id ? updatedContact : contact,
-        ),
-      );
+      const updatedContact = await editContactApi(currentContact.id, data);
+      dispatch(updateContactAction(updatedContact));
       setCurrentContact(updatedContact);
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -50,8 +54,8 @@ function App() {
   };
   const createNewContact = async (data) => {
     try {
-      const newData = await addContact(data);
-      setContacts((prev) => [...prev, newData]);
+      const newData = await addContactApi(data);
+      dispatch(addContactAction(newData));
       setCurrentContact({ ...INITIAL_FORM_STATE });
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -60,8 +64,8 @@ function App() {
   };
   const handleDelete = async (id) => {
     try {
-      await deleteContact(id);
-      setContacts((prev) => prev.filter((contact) => contact.id !== id));
+      await deleteContactApi(id);
+      dispatch(deleteContactAction(id));
       if (currentContact.id === id)
         setCurrentContact({ ...INITIAL_FORM_STATE });
     } catch (error) {
